@@ -1,5 +1,7 @@
 # SPAvatarKit SDK 示例
 
+SPAvatarKit practice demos in vanilla, Vue, and React
+
 这是一个完整的 SDK 使用示例集合，展示如何在不同框架中集成和使用 SPAvatarKit SDK。
 
 ## 📋 目录
