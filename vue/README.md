@@ -1,59 +1,59 @@
-# Vue 3 示例
+# Vue 3 Example
 
-这是一个使用 Vue 3 Composition API 的 SPAvatarKit SDK 示例，展示如何在 Vue 应用中集成 SDK。
+This is a SPAvatarKit SDK example using Vue 3 Composition API, demonstrating how to integrate the SDK in a Vue application.
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
-# 进入 vue 示例目录
+# Navigate to vue example directory
 cd vue
 
-# 安装依赖
+# Install dependencies
 npm install
 ```
 
-### 2. 启动开发服务器
+### 2. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-### 3. 访问示例
+### 3. Access Example
 
-打开浏览器访问：`http://localhost:5175`
+Open browser and visit: `http://localhost:5175`
 
-## 📋 功能特性
+## 📋 Features
 
-- ✅ 使用 Vue 3 Composition API 管理 SDK 状态
-- ✅ 响应式数据绑定
-- ✅ 组件化架构
-- ✅ 生命周期管理（onUnmounted）
-- ✅ TypeScript 支持
-- ✅ 计算属性（computed）控制按钮状态
-- ✅ 完整的错误处理
-- ✅ 资源清理（组件卸载时）
+- ✅ SDK state management using Vue 3 Composition API
+- ✅ Reactive data binding
+- ✅ Component-based architecture
+- ✅ Lifecycle management (onUnmounted)
+- ✅ TypeScript support
+- ✅ Computed properties control button state
+- ✅ Complete error handling
+- ✅ Resource cleanup (on component unmount)
 
-## 🎯 适用场景
+## 🎯 Use Cases
 
-- Vue 3 项目集成
-- 需要响应式状态管理
-- 组件化开发
-- 需要类型安全的项目
+- Vue 3 project integration
+- Reactive state management needed
+- Component-based development
+- Type-safe projects
 
-## 🔧 技术栈
+## 🔧 Tech Stack
 
-- **Vue 3** - UI 框架
-- **Composition API** - 组合式 API
-- **Vite** - 开发服务器和构建工具
-- **TypeScript** - 类型安全
+- **Vue 3** - UI framework
+- **Composition API** - Composition API
+- **Vite** - Development server and build tool
+- **TypeScript** - Type safety
 
-## 📖 代码说明
+## 📖 Code Explanation
 
-### 关键步骤
+### Key Steps
 
-#### 1. SDK 初始化（使用 Composition API）
+#### 1. SDK Initialization (using Composition API)
 
 ```typescript
 const isInitialized = ref(false)
@@ -67,7 +67,7 @@ async function handleInit() {
 }
 ```
 
-#### 2. 加载角色
+#### 2. Load Character
 
 ```typescript
 const avatarView = ref<AvatarView | null>(null)
@@ -80,7 +80,7 @@ async function handleLoadCharacter() {
 }
 ```
 
-#### 3. 连接服务
+#### 3. Connect Service
 
 ```typescript
 const avatarController = ref<AvatarController | null>(null)
@@ -91,7 +91,7 @@ async function handleConnect() {
 }
 ```
 
-#### 4. 计算属性控制按钮状态
+#### 4. Computed Properties Control Button State
 
 ```typescript
 const canInit = computed(() => !isInitialized.value)
@@ -99,11 +99,11 @@ const canLoad = computed(() => isInitialized.value && !avatarManager.value)
 const canConnect = computed(() => !!avatarView.value && !avatarController.value)
 ```
 
-#### 5. 资源清理
+#### 5. Resource Cleanup
 
 ```typescript
 onUnmounted(async () => {
-  // 组件卸载时清理资源
+  // Clean up resources when component unmounts
   if (avatarController.value) {
     avatarController.value.close()
   }
@@ -116,47 +116,60 @@ onUnmounted(async () => {
 })
 ```
 
-## 🔑 配置说明
+## 🔑 Configuration
 
-### 环境配置
+### Environment Configuration
 
-- **`test`** - 测试环境（默认）
-- **`us`** - 美国生产环境
-- **`cn`** - 中国生产环境
+- **`test`** - Test environment (default)
+- **`us`** - US production environment
+- **`cn`** - China production environment
 
-### Session Token（可选）
+### Session Token (Optional)
 
-在界面中输入 Session Token，或通过代码配置。
+Enter Session Token in the interface, or configure via code.
 
-### 角色 ID
+### Character ID
 
-从 SDK 管理平台获取角色 ID。
+Get character ID from SDK management platform.
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 vue/
 ├── src/
-│   ├── App.vue         # 主应用组件
-│   ├── main.ts         # 入口文件
-│   └── vite-env.d.ts   # Vite 类型定义
-├── index.html          # HTML 入口
-├── package.json        # 依赖配置
-├── vite.config.ts      # Vite 配置
-├── tsconfig.json       # TypeScript 配置
-└── README.md           # 本文件
+│   ├── components/          # UI components
+│   │   ├── StatusBar.vue    # Status bar component
+│   │   ├── ControlPanel.vue # Control panel component
+│   │   ├── LogPanel.vue     # Log panel component
+│   │   └── AvatarCanvas.vue # Canvas container component
+│   ├── composables/         # Composables
+│   │   ├── useLogger.ts     # Logger composable
+│   │   ├── useAudioRecorder.ts # Audio recording composable
+│   │   └── useAvatarSDK.ts  # SDK composable
+│   ├── utils/               # Utility functions
+│   │   └── audioUtils.ts    # Audio processing utilities
+│   ├── types/               # Type definitions
+│   │   └── index.ts         # Type definitions
+│   ├── App.vue              # Main app component
+│   ├── main.ts              # Entry file
+│   └── vite-env.d.ts        # Vite type definitions
+├── index.html               # HTML entry
+├── package.json             # Dependencies
+├── vite.config.ts           # Vite configuration
+├── tsconfig.json            # TypeScript configuration
+└── README.md                # This file
 ```
 
-## 💡 Vue 3 最佳实践
+## 💡 Vue 3 Best Practices
 
-### 使用 ref 管理响应式状态
+### Using ref to Manage Reactive State
 
 ```typescript
 const avatarView = ref<AvatarView | null>(null)
 const isRecording = ref(false)
 ```
 
-### 使用 computed 计算属性
+### Using computed Properties
 
 ```typescript
 const canStartRecord = computed(() => 
@@ -164,24 +177,23 @@ const canStartRecord = computed(() =>
 )
 ```
 
-### 使用 onUnmounted 清理资源
+### Using onUnmounted to Clean Up Resources
 
-确保在组件卸载时正确清理 SDK 资源，避免内存泄漏。
+Ensure SDK resources are properly cleaned up when component unmounts to avoid memory leaks.
 
-## ⚠️ 注意事项
+## ⚠️ Notes
 
-- 需要浏览器支持 Web Audio API、WebSocket 和 WASM
-- 需要用户授权麦克风权限
-- 确保已安装 `@spatialwalk/avatarkit` SDK：`npm install @spatialwalk/avatarkit`
-- 组件卸载时会自动清理资源，无需手动管理
+- Requires browser support for Web Audio API, WebSocket, and WASM
+- Requires user authorization for microphone permission
+- Ensure `@spatialwalk/avatarkit` SDK is installed: `npm install @spatialwalk/avatarkit`
+- Resources are automatically cleaned up on component unmount, no manual management needed
 
-## 🔍 查看代码
+## 🔍 View Code
 
-主要代码在 `src/App.vue` 中，包含：
+Main code is in `src/App.vue`, including:
 - Vue 3 Composition API
-- 响应式状态管理
-- 计算属性
-- SDK 集成逻辑
+- Reactive state management
+- Computed properties
+- SDK integration logic
 
-查看源代码了解具体实现细节。
-
+Check the source code for specific implementation details.

@@ -1,58 +1,58 @@
-# React 示例
+# React Example
 
-这是一个使用 React Hooks 的 SPAvatarKit SDK 示例，展示如何在 React 应用中集成 SDK。
+This is a SPAvatarKit SDK example using React Hooks, demonstrating how to integrate the SDK in a React application.
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
-# 进入 react 示例目录
+# Navigate to react example directory
 cd react
 
-# 安装依赖
+# Install dependencies
 npm install
 ```
 
-### 2. 启动开发服务器
+### 2. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-### 3. 访问示例
+### 3. Access Example
 
-打开浏览器访问：`http://localhost:5176`
+Open browser and visit: `http://localhost:5176`
 
-## 📋 功能特性
+## 📋 Features
 
-- ✅ 使用 React Hooks 管理 SDK 状态
-- ✅ 函数式组件
-- ✅ 生命周期管理（useEffect）
-- ✅ TypeScript 支持
-- ✅ 响应式状态更新
-- ✅ 完整的错误处理
-- ✅ 资源清理（组件卸载时）
+- ✅ SDK state management using React Hooks
+- ✅ Functional components
+- ✅ Lifecycle management (useEffect)
+- ✅ TypeScript support
+- ✅ Reactive state updates
+- ✅ Complete error handling
+- ✅ Resource cleanup (on component unmount)
 
-## 🎯 适用场景
+## 🎯 Use Cases
 
-- React 项目集成
-- 需要函数式编程风格
-- 现代 React 开发
-- 需要类型安全的项目
+- React project integration
+- Functional programming style needed
+- Modern React development
+- Type-safe projects
 
-## 🔧 技术栈
+## 🔧 Tech Stack
 
-- **React 18** - UI 框架
-- **React Hooks** - 状态管理
-- **Vite** - 开发服务器和构建工具
-- **TypeScript** - 类型安全
+- **React 18** - UI framework
+- **React Hooks** - State management
+- **Vite** - Development server and build tool
+- **TypeScript** - Type safety
 
-## 📖 代码说明
+## 📖 Code Explanation
 
-### 使用示例
+### Usage Example
 
-代码采用模块化设计，主要入口在 `src/App.tsx`：
+The code uses a modular design, with the main entry point in `src/App.tsx`:
 
 ```typescript
 // src/App.tsx
@@ -65,132 +65,132 @@ function App() {
   const audioRecorder = useAudioRecorder()
   const sdk = useAvatarSDK()
   
-  // 使用 Hooks 处理业务逻辑
+  // Use Hooks to handle business logic
 }
 ```
 
-### 关键 Hooks
+### Key Hooks
 
 #### 1. useAvatarSDK Hook
 
-管理 SDK 的初始化和状态：
+Manages SDK initialization and state:
 
 ```typescript
 const sdk = useAvatarSDK()
 
-// 初始化
+// Initialize
 await sdk.initialize(environment, sessionToken)
 
-// 加载角色
+// Load character
 await sdk.loadCharacter(characterId, canvasContainer, callbacks)
 
-// 连接服务
+// Connect service
 await sdk.connect()
 ```
 
 #### 2. useAudioRecorder Hook
 
-处理音频录制：
+Handles audio recording:
 
 ```typescript
 const audioRecorder = useAudioRecorder()
 
-// 开始录音
+// Start recording
 await audioRecorder.start()
 
-// 停止录音并获取处理后的音频数据
+// Stop recording and get processed audio data
 const audioBuffer = await audioRecorder.stop()
 ```
 
 #### 3. useLogger Hook
 
-管理日志和状态：
+Manages logs and status:
 
 ```typescript
 const logger = useLogger()
 
-logger.log('info', '消息')
-logger.updateStatus('状态消息', 'success')
+logger.log('info', 'Message')
+logger.updateStatus('Status message', 'success')
 logger.clearLogs()
 ```
 
-### 组件说明
+### Component Description
 
-- **StatusBar** - 显示当前状态
-- **ControlPanel** - 控制按钮和表单
-- **LogPanel** - 日志显示
-- **AvatarCanvas** - Canvas 容器（使用 forwardRef）
+- **StatusBar** - Displays current status
+- **ControlPanel** - Control buttons and forms
+- **LogPanel** - Log display
+- **AvatarCanvas** - Canvas container (using forwardRef)
 
-### 代码流程
+### Code Flow
 
-1. **初始化** - 使用 `useLogger`、`useAudioRecorder`、`useAvatarSDK` Hooks
-2. **用户交互** - 通过事件处理器调用 Hooks 方法
-3. **状态管理** - Hooks 内部管理状态，组件只负责 UI
-4. **资源清理** - Hooks 自动处理清理逻辑
+1. **Initialization** - Use `useLogger`, `useAudioRecorder`, `useAvatarSDK` Hooks
+2. **User Interaction** - Call Hook methods through event handlers
+3. **State Management** - Hooks manage state internally, components only handle UI
+4. **Resource Cleanup** - Hooks automatically handle cleanup logic
 
-## 🔑 配置说明
+## 🔑 Configuration
 
-### 环境配置
+### Environment Configuration
 
-- **`test`** - 测试环境（默认）
-- **`us`** - 美国生产环境
-- **`cn`** - 中国生产环境
+- **`test`** - Test environment (default)
+- **`us`** - US production environment
+- **`cn`** - China production environment
 
-### Session Token（可选）
+### Session Token (Optional)
 
-在界面中输入 Session Token，或通过代码配置。
+Enter Session Token in the interface, or configure via code.
 
-### 角色 ID
+### Character ID
 
-从 SDK 管理平台获取角色 ID。
+Get character ID from SDK management platform.
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 react/
 ├── src/
-│   ├── components/          # UI 组件
-│   │   ├── StatusBar.tsx    # 状态栏组件
-│   │   ├── ControlPanel.tsx # 控制面板组件
-│   │   ├── LogPanel.tsx     # 日志面板组件
-│   │   └── AvatarCanvas.tsx # Canvas 容器组件
-│   ├── hooks/               # 自定义 Hooks
-│   │   ├── useLogger.ts     # 日志 Hook
-│   │   ├── useAudioRecorder.ts # 录音 Hook
+│   ├── components/          # UI components
+│   │   ├── StatusBar.tsx    # Status bar component
+│   │   ├── ControlPanel.tsx # Control panel component
+│   │   ├── LogPanel.tsx     # Log panel component
+│   │   └── AvatarCanvas.tsx # Canvas container component
+│   ├── hooks/               # Custom Hooks
+│   │   ├── useLogger.ts     # Logger Hook
+│   │   ├── useAudioRecorder.ts # Audio recording Hook
 │   │   └── useAvatarSDK.ts  # SDK Hook
-│   ├── utils/               # 工具函数
-│   │   └── audioUtils.ts    # 音频处理工具
-│   ├── types/               # 类型定义
-│   │   └── index.ts         # 类型定义
-│   ├── App.tsx              # 主应用组件（仅组装）
-│   ├── App.css              # 样式文件
-│   ├── main.tsx             # 入口文件
-│   └── vite-env.d.ts        # Vite 类型定义
-├── index.html               # HTML 入口
-├── package.json             # 依赖配置
-├── vite.config.ts           # Vite 配置
-├── tsconfig.json            # TypeScript 配置
-└── README.md                # 本文件
+│   ├── utils/               # Utility functions
+│   │   └── audioUtils.ts    # Audio processing utilities
+│   ├── types/               # Type definitions
+│   │   └── index.ts         # Type definitions
+│   ├── App.tsx              # Main app component (assembly only)
+│   ├── App.css              # Styles
+│   ├── main.tsx             # Entry file
+│   └── vite-env.d.ts        # Vite type definitions
+├── index.html               # HTML entry
+├── package.json             # Dependencies
+├── vite.config.ts           # Vite configuration
+├── tsconfig.json            # TypeScript configuration
+└── README.md                # This file
 ```
 
-### 代码结构说明
+### Code Structure Explanation
 
-代码采用 React 最佳实践组织：
+The code is organized following React best practices:
 
-- **组件化** - UI 拆分为独立的功能组件
-- **Hooks 提取** - 业务逻辑封装为可复用的 Hooks
-- **类型安全** - 完整的 TypeScript 类型定义
-- **关注点分离** - 每个文件职责单一
+- **Componentization** - UI split into independent functional components
+- **Hook Extraction** - Business logic encapsulated as reusable Hooks
+- **Type Safety** - Complete TypeScript type definitions
+- **Separation of Concerns** - Each file has a single responsibility
 
-这种结构使得代码：
-- ✅ 易于维护（组件和 Hooks 独立）
-- ✅ 易于测试（可以单独测试每个 Hook 和组件）
-- ✅ 易于复用（Hooks 可以在其他组件中复用）
-- ✅ 符合 React 最佳实践
+This structure makes the code:
+- ✅ Easy to maintain (components and Hooks are independent)
+- ✅ Easy to test (each Hook and component can be tested separately)
+- ✅ Easy to reuse (Hooks can be reused in other components)
+- ✅ Follows React best practices
 
-## 💡 React 最佳实践
+## 💡 React Best Practices
 
-### 使用 useRef 保存最新值
+### Using useRef to Store Latest Values
 
 ```typescript
 const avatarViewRef = useRef<AvatarView | null>(null)
@@ -200,28 +200,27 @@ useEffect(() => {
 }, [avatarView])
 ```
 
-这样可以确保在清理函数中访问到最新的值。
+This ensures access to the latest value in cleanup functions.
 
-### 状态同步
+### State Synchronization
 
-使用 `useState` 管理响应式状态，使用 `useRef` 保存需要在清理函数中访问的值。
+Use `useState` to manage reactive state, use `useRef` to store values that need to be accessed in cleanup functions.
 
-## ⚠️ 注意事项
+## ⚠️ Notes
 
-- 需要浏览器支持 Web Audio API、WebSocket 和 WASM
-- 需要用户授权麦克风权限
-- 确保已安装 `@spatialwalk/avatarkit` SDK：`npm install @spatialwalk/avatarkit`
-- 组件卸载时会自动清理资源，无需手动管理
+- Requires browser support for Web Audio API, WebSocket, and WASM
+- Requires user authorization for microphone permission
+- Ensure `@spatialwalk/avatarkit` SDK is installed: `npm install @spatialwalk/avatarkit`
+- Resources are automatically cleaned up on component unmount, no manual management needed
 
-## 🔍 查看代码
+## 🔍 View Code
 
-主要代码文件：
+Main code files:
 
-- **`src/App.tsx`** - 主应用组件，整合所有 Hooks 和组件
-- **`src/hooks/useAvatarSDK.ts`** - SDK 管理逻辑
-- **`src/hooks/useAudioRecorder.ts`** - 音频录制逻辑
-- **`src/hooks/useLogger.ts`** - 日志和状态管理
-- **`src/components/`** - UI 组件目录
+- **`src/App.tsx`** - Main app component, integrates all Hooks and components
+- **`src/hooks/useAvatarSDK.ts`** - SDK management logic
+- **`src/hooks/useAudioRecorder.ts`** - Audio recording logic
+- **`src/hooks/useLogger.ts`** - Log and status management
+- **`src/components/`** - UI component directory
 
-每个模块都有清晰的职责，便于理解和维护。查看源代码了解具体实现细节。
-
+Each module has clear responsibilities, making it easy to understand and maintain. Check the source code for specific implementation details.

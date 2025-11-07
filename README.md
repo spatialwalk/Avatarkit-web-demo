@@ -163,7 +163,7 @@ All examples follow the same basic flow:
    - Display loading progress
 
 4. **Connect Service** - Establish WebSocket connection
-   - Connect to real-time animation service
+   - Connect to animation service
    - Wait for successful connection
 
 5. **Start Recording** - Capture audio and send to server

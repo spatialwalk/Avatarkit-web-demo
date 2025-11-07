@@ -1,56 +1,56 @@
-# Vanilla JS 示例
+# Vanilla JS Example
 
-这是一个使用原生 JavaScript 的 SPAvatarKit SDK 示例，展示如何在不使用任何框架的情况下集成 SDK。
+This is a SPAvatarKit SDK example using native JavaScript, demonstrating how to integrate the SDK without using any framework.
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
-# 进入 vanilla 示例目录
+# Navigate to vanilla example directory
 cd vanilla
 
-# 安装依赖
+# Install dependencies
 npm install
 ```
 
-### 2. 启动开发服务器
+### 2. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-### 3. 访问示例
+### 3. Access Example
 
-打开浏览器访问：`http://localhost:5174/demo.html`
+Open browser and visit: `http://localhost:5174/demo.html`
 
-## 📋 功能特性
+## 📋 Features
 
-- ✅ SDK 初始化
-- ✅ 角色加载（支持进度显示）
-- ✅ WebSocket 连接管理
-- ✅ 实时音频录制和发送
-- ✅ 动画实时渲染
-- ✅ 打断对话功能
-- ✅ 日志面板（实时状态显示）
+- ✅ SDK initialization
+- ✅ Character loading (with progress display)
+- ✅ WebSocket connection management
+- ✅ Real-time audio recording and sending
+- ✅ Real-time animation rendering
+- ✅ Conversation interruption
+- ✅ Log panel (real-time status display)
 
-## 🎯 适用场景
+## 🎯 Use Cases
 
-- 快速原型开发
-- 不依赖框架的项目
-- 学习 SDK 基础用法
-- 作为其他框架示例的参考
+- Rapid prototyping
+- Framework-independent projects
+- Learning basic SDK usage
+- Reference for other framework examples
 
-## 🔧 技术栈
+## 🔧 Tech Stack
 
-- **原生 JavaScript** (ES Modules)
-- **Vite** - 开发服务器和构建工具
+- **Native JavaScript** (ES Modules)
+- **Vite** - Development server and build tool
 
-## 📖 代码说明
+## 📖 Code Explanation
 
-### 使用示例
+### Usage Example
 
-代码采用模块化设计，主要入口在 `src/js/app.js`：
+The code uses a modular design, with the main entry point in `src/js/app.js`:
 
 ```javascript
 // src/js/app.js
@@ -58,129 +58,128 @@ import { Logger, updateStatus } from './logger.js'
 import { AudioRecorder } from './audioRecorder.js'
 import { AvatarSDKManager } from './avatarSDK.js'
 
-// 初始化应用
+// Initialize application
 const app = new App()
 ```
 
-### 关键模块
+### Key Modules
 
-#### 1. SDK 管理 (`src/js/avatarSDK.js`)
+#### 1. SDK Management (`src/js/avatarSDK.js`)
 
 ```javascript
 const sdkManager = new AvatarSDKManager(logger)
 
-// 初始化 SDK
+// Initialize SDK
 await sdkManager.initialize(environment, sessionToken)
 
-// 加载角色
+// Load character
 await sdkManager.loadCharacter(characterId, canvasContainer, callbacks)
 
-// 连接服务
+// Connect service
 await sdkManager.connect()
 ```
 
-#### 2. 音频录制 (`src/js/audioRecorder.js`)
+#### 2. Audio Recording (`src/js/audioRecorder.js`)
 
 ```javascript
 const audioRecorder = new AudioRecorder()
 
-// 开始录音
+// Start recording
 await audioRecorder.start()
 
-// 停止录音并获取处理后的音频数据
+// Stop recording and get processed audio data
 const audioBuffer = await audioRecorder.stop()
 ```
 
-#### 3. 日志系统 (`src/js/logger.js`)
+#### 3. Logging System (`src/js/logger.js`)
 
 ```javascript
 const logger = new Logger(logPanel)
 
-logger.info('信息')
-logger.success('成功')
-logger.warning('警告')
-logger.error('错误')
+logger.info('Info')
+logger.success('Success')
+logger.warning('Warning')
+logger.error('Error')
 ```
 
-### 代码流程
+### Code Flow
 
-1. **初始化阶段** - `App` 类创建实例，加载 SDK
-2. **用户交互** - 通过事件监听器处理按钮点击
-3. **SDK 操作** - 通过 `AvatarSDKManager` 封装类管理 SDK
-4. **音频处理** - 通过 `AudioRecorder` 类处理录音和音频格式转换
-5. **状态更新** - 通过 `Logger` 和 `updateStatus` 更新 UI
+1. **Initialization Phase** - `App` class creates instance, loads SDK
+2. **User Interaction** - Handle button clicks through event listeners
+3. **SDK Operations** - Manage SDK through `AvatarSDKManager` wrapper class
+4. **Audio Processing** - Handle recording and audio format conversion through `AudioRecorder` class
+5. **Status Updates** - Update UI through `Logger` and `updateStatus`
 
-## 🔑 配置说明
+## 🔑 Configuration
 
-### 环境配置
+### Environment Configuration
 
-- **`test`** - 测试环境（默认）
-- **`us`** - 美国生产环境
-- **`cn`** - 中国生产环境
+- **`test`** - Test environment (default)
+- **`us`** - US production environment
+- **`cn`** - China production environment
 
-### Session Token（可选）
+### Session Token (Optional)
 
-如果服务器需要认证，在界面中输入有效的 Session Token。
+If the server requires authentication, enter a valid Session Token in the interface.
 
-### 角色 ID
+### Character ID
 
-从 SDK 管理平台获取角色 ID，用于加载指定的虚拟角色。
+Get character ID from SDK management platform to load the specified virtual character.
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 vanilla/
-├── demo.html              # 主演示页面（HTML 结构）
-├── index.html             # 入口页面
-├── package.json           # 依赖配置
-├── vite.config.ts         # Vite 配置
+├── demo.html              # Main demo page (HTML structure)
+├── index.html             # Entry page
+├── package.json           # Dependencies
+├── vite.config.ts         # Vite configuration
 ├── src/
 │   ├── styles/
-│   │   └── main.css       # 样式文件
+│   │   └── main.css       # Styles
 │   ├── js/
-│   │   ├── app.js         # 主应用逻辑
-│   │   ├── logger.js      # 日志系统
-│   │   ├── audioRecorder.js # 音频录制功能
-│   │   └── avatarSDK.js   # SDK 封装
+│   │   ├── app.js         # Main application logic
+│   │   ├── logger.js      # Logging system
+│   │   ├── audioRecorder.js # Audio recording functionality
+│   │   └── avatarSDK.js   # SDK wrapper
 │   └── utils/
-│       └── audioUtils.js  # 音频处理工具
-└── README.md              # 本文件
+│       └── audioUtils.js  # Audio processing utilities
+└── README.md              # This file
 ```
 
-### 代码结构说明
+### Code Structure Explanation
 
-代码按照关注点分离原则组织：
+The code is organized following separation of concerns:
 
-- **`demo.html`** - 只包含 HTML 结构，引用外部 CSS 和 JS
-- **`src/styles/main.css`** - 所有样式定义
-- **`src/js/app.js`** - 主应用类，整合所有模块，处理用户交互
-- **`src/js/logger.js`** - 日志系统和状态更新工具
-- **`src/js/audioRecorder.js`** - 音频录制功能封装
-- **`src/js/avatarSDK.js`** - SDK 初始化和管理的封装
-- **`src/utils/audioUtils.js`** - 音频处理工具函数（重采样、格式转换等）
+- **`demo.html`** - Contains only HTML structure, references external CSS and JS
+- **`src/styles/main.css`** - All style definitions
+- **`src/js/app.js`** - Main application class, integrates all modules, handles user interaction
+- **`src/js/logger.js`** - Logging system and status update utilities
+- **`src/js/audioRecorder.js`** - Audio recording functionality encapsulation
+- **`src/js/avatarSDK.js`** - SDK initialization and management wrapper
+- **`src/utils/audioUtils.js`** - Audio processing utility functions (resampling, format conversion, etc.)
 
-这种结构使得代码：
-- ✅ 易于维护（每个文件职责单一）
-- ✅ 易于测试（功能模块独立）
-- ✅ 易于扩展（添加新功能只需新增模块）
-- ✅ 符合最佳实践（关注点分离）
+This structure makes the code:
+- ✅ Easy to maintain (each file has a single responsibility)
+- ✅ Easy to test (functional modules are independent)
+- ✅ Easy to extend (adding new features only requires new modules)
+- ✅ Follows best practices (separation of concerns)
 
-## ⚠️ 注意事项
+## ⚠️ Notes
 
-- 需要浏览器支持 Web Audio API、WebSocket 和 WASM
-- 需要用户授权麦克风权限
-- 建议使用 HTTPS 或 localhost（某些浏览器要求）
-- 确保已安装 `@spatialwalk/avatarkit` SDK：`npm install @spatialwalk/avatarkit`
+- Requires browser support for Web Audio API, WebSocket, and WASM
+- Requires user authorization for microphone permission
+- Recommended to use HTTPS or localhost (required by some browsers)
+- Ensure `@spatialwalk/avatarkit` SDK is installed: `npm install @spatialwalk/avatarkit`
 
-## 🔍 查看代码
+## 🔍 View Code
 
-代码已经模块化，主要文件：
+The code is modularized, main files:
 
-- **`src/js/app.js`** - 主应用逻辑，整合所有模块
-- **`src/js/avatarSDK.js`** - SDK 封装，处理初始化和角色管理
-- **`src/js/audioRecorder.js`** - 音频录制和处理
-- **`src/js/logger.js`** - 日志和状态管理
-- **`src/utils/audioUtils.js`** - 音频工具函数
+- **`src/js/app.js`** - Main application logic, integrates all modules
+- **`src/js/avatarSDK.js`** - SDK wrapper, handles initialization and character management
+- **`src/js/audioRecorder.js`** - Audio recording and processing
+- **`src/js/logger.js`** - Log and status management
+- **`src/utils/audioUtils.js`** - Audio utility functions
 
-每个模块都有清晰的职责，便于理解和维护。查看源代码了解具体实现细节。
-
+Each module has clear responsibilities, making it easy to understand and maintain. Check the source code for specific implementation details.
