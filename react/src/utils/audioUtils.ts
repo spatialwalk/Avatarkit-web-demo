@@ -1,9 +1,9 @@
 /**
- * 音频处理工具函数
+ * Audio processing utility functions
  */
 
 /**
- * 重采样音频数据
+ * Resample audio data
  */
 export function resampleAudio(
   inputData: Float32Array,
@@ -24,7 +24,7 @@ export function resampleAudio(
     const indexCeil = Math.min(indexFloor + 1, inputData.length - 1)
     const fraction = index - indexFloor
 
-    // 线性插值
+    // Linear interpolation
     outputData[i] = inputData[indexFloor] * (1 - fraction) + inputData[indexCeil] * fraction
   }
 
@@ -32,7 +32,7 @@ export function resampleAudio(
 }
 
 /**
- * 将 Float32Array 转换为 Int16 PCM
+ * Convert Float32Array to Int16 PCM
  */
 export function convertToInt16PCM(float32Data: Float32Array): Int16Array {
   const pcm16 = new Int16Array(float32Data.length)
@@ -44,19 +44,19 @@ export function convertToInt16PCM(float32Data: Float32Array): Int16Array {
 }
 
 /**
- * 将 Int16Array 转换为 Uint8Array（小端序）
+ * Convert Int16Array to Uint8Array (little-endian)
  */
 export function convertToUint8Array(int16Data: Int16Array): Uint8Array {
   const uint8Array = new Uint8Array(int16Data.length * 2)
   const view = new DataView(uint8Array.buffer)
   for (let i = 0; i < int16Data.length; i++) {
-    view.setInt16(i * 2, int16Data[i], true) // true 表示小端序
+    view.setInt16(i * 2, int16Data[i], true) // true means little-endian
   }
   return uint8Array
 }
 
 /**
- * 合并多个音频块
+ * Merge multiple audio chunks
  */
 export function mergeAudioChunks(chunks: Array<{ data: Float32Array }>): Float32Array {
   const totalSamples = chunks.reduce((sum, chunk) => sum + chunk.data.length, 0)

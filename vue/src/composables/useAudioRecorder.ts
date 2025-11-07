@@ -1,6 +1,6 @@
 /**
- * 音频录制 Composable
- * 使用 ScriptProcessorNode 实现（与 Vanilla 版本相同的方案）
+ * Audio Recording Composable
+ * Implemented using ScriptProcessorNode (same approach as Vanilla version)
  */
 
 import { ref, onUnmounted } from 'vue'
@@ -17,24 +17,24 @@ export function useAudioRecorder() {
 
   const start = async () => {
     try {
-      // 如果已经在录音，先停止
+      // If already recording, stop first
       if (isRecordingFlagRef.value) {
         await stop()
-        // 等待一小段时间确保状态更新完成
+        // Wait a short time to ensure state update completes
         await new Promise((resolve) => setTimeout(resolve, 50))
       }
 
-      // 清空之前的录音数据
+      // Clear previous recording data
       audioChunksRef.value = []
 
-      // 创建 AudioContext
+      // Create AudioContext
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({
         sampleRate: 16000,
       })
       audioContextRef.value = audioContext
       actualSampleRateRef.value = audioContext.sampleRate
 
-      // 获取音频流
+      // Get audio stream
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
@@ -47,25 +47,25 @@ export function useAudioRecorder() {
 
       mediaStreamRef.value = stream
 
-      // 创建 ScriptProcessorNode
+      // Create ScriptProcessorNode
       const bufferSize = 4096
       const scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1)
       scriptProcessorRef.value = scriptProcessor
 
-      // 创建 GainNode 静音输出
+      // Create GainNode to mute output
       const gainNode = audioContext.createGain()
       gainNode.gain.value = 0
 
-      // 连接音频节点
+      // Connect audio nodes
       const source = audioContext.createMediaStreamSource(stream)
       source.connect(scriptProcessor)
       scriptProcessor.connect(gainNode)
       gainNode.connect(audioContext.destination)
 
-      // 先设置标志，再设置回调函数
+      // Set flag first, then set callback function
       isRecordingFlagRef.value = true
 
-      // 设置回调函数
+      // Set callback function
       scriptProcessor.onaudioprocess = (event) => {
         if (!isRecordingFlagRef.value) return
 
@@ -75,12 +75,12 @@ export function useAudioRecorder() {
         })
       }
 
-      // 最后更新 Vue 状态
+      // Finally update Vue state
       isRecording.value = true
     } catch (error) {
       isRecordingFlagRef.value = false
       isRecording.value = false
-      throw new Error(`录音启动失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to start recording: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
@@ -89,13 +89,13 @@ export function useAudioRecorder() {
       isRecordingFlagRef.value = false
       isRecording.value = false
 
-      // 断开 ScriptProcessorNode
+      // Disconnect ScriptProcessorNode
       if (scriptProcessorRef.value) {
         scriptProcessorRef.value.disconnect()
         scriptProcessorRef.value = null
       }
 
-      // 停止流
+      // Stop stream
       if (mediaStreamRef.value) {
         mediaStreamRef.value.getTracks().forEach((track) => track.stop())
         mediaStreamRef.value = null
@@ -103,7 +103,7 @@ export function useAudioRecorder() {
 
       const currentSampleRate = actualSampleRateRef.value
 
-      // 关闭 AudioContext
+      // Close AudioContext
       if (audioContextRef.value) {
         try {
           const state = audioContextRef.value.state as string
@@ -111,38 +111,38 @@ export function useAudioRecorder() {
             await audioContextRef.value.close()
           }
         } catch (err) {
-          // 静默处理关闭错误
+          // Silently handle close errors
         } finally {
           audioContextRef.value = null
         }
       }
 
-      // 处理音频数据
+      // Process audio data
       if (audioChunksRef.value.length === 0) {
         return null
       }
 
-      // 1. 合并所有 Float32Array 数据
+      // 1. Merge all Float32Array data
       const mergedFloat32 = mergeAudioChunks(audioChunksRef.value)
 
-      // 2. 重采样到 16kHz（如果需要）
+      // 2. Resample to 16kHz (if needed)
       let finalAudio = mergedFloat32
       if (currentSampleRate !== 16000) {
         finalAudio = resampleAudio(mergedFloat32, currentSampleRate, 16000)
       }
 
-      // 3. 转换为 Int16 PCM
+      // 3. Convert to Int16 PCM
       const pcm16 = convertToInt16PCM(finalAudio)
 
-      // 4. 转换为 Uint8Array
+      // 4. Convert to Uint8Array
       const mergedAudio = convertToUint8Array(pcm16)
 
-      // 清空缓存
+      // Clear cache
       audioChunksRef.value = []
 
       return mergedAudio.buffer as ArrayBuffer
     } catch (error) {
-      throw new Error(`停止录音失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to stop recording: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
@@ -152,12 +152,12 @@ export function useAudioRecorder() {
     }
   }
 
-  // 组件卸载时清理
+  // Cleanup on component unmount
   onUnmounted(() => {
-    // 只清理资源，不更新状态（组件已卸载，更新状态无意义且会报错）
+    // Only clean up resources, don't update state (component is unmounted, updating state is meaningless and will error)
     if (isRecordingFlagRef.value) {
       isRecordingFlagRef.value = false
-      // 清理资源但不处理数据
+      // Clean up resources but don't process data
       if (scriptProcessorRef.value) {
         scriptProcessorRef.value.disconnect()
         scriptProcessorRef.value = null

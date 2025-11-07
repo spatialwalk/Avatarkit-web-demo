@@ -1,6 +1,6 @@
 /**
  * Avatar SDK Composable
- * 封装 SDK 的初始化和使用逻辑
+ * Encapsulates SDK initialization and usage logic
  */
 
 import { ref, onUnmounted } from 'vue'
@@ -12,7 +12,7 @@ export function useAvatarSDK() {
   const avatarViewRef = ref<AvatarView | null>(null)
   const avatarController = ref<AvatarController | null>(null)
 
-  // 初始化 SDK
+  // Initialize SDK
   const initialize = async (environment: Environment, sessionToken?: string) => {
     try {
       await AvatarKit.initialize('demo', { environment })
@@ -25,11 +25,11 @@ export function useAvatarSDK() {
       avatarManagerRef.value = avatarManager
       isInitialized.value = true
     } catch (error) {
-      throw new Error(`SDK 初始化失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`SDK initialization failed: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
-  // 加载角色
+  // Load character
   const loadCharacter = async (
     characterId: string,
     container: HTMLElement,
@@ -40,17 +40,17 @@ export function useAvatarSDK() {
     },
   ) => {
     if (!avatarManagerRef.value) {
-      throw new Error('SDK 未初始化')
+      throw new Error('SDK not initialized')
     }
 
     try {
-      // 1. 加载 Avatar
+      // 1. Load Avatar
       const avatar = await avatarManagerRef.value.load(characterId)
       
-      // 2. 创建 AvatarView
+      // 2. Create AvatarView
       const avatarView = new AvatarView(avatar, container)
       
-      // 3. 设置回调
+      // 3. Set callbacks
       if (callbacks?.onConnectionState) {
         avatarView.avatarController.onConnectionState = callbacks.onConnectionState
       }
@@ -64,54 +64,54 @@ export function useAvatarSDK() {
       avatarViewRef.value = avatarView
       avatarController.value = avatarView.avatarController
     } catch (error) {
-      throw new Error(`角色加载失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to load character: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
-  // 连接服务
+  // Connect service
   const connect = async () => {
     if (!avatarViewRef.value?.avatarController) {
-      throw new Error('角色未加载')
+      throw new Error('Character not loaded')
     }
 
     await avatarViewRef.value.avatarController.start()
   }
 
-  // 发送音频数据
+  // Send audio data
   const sendAudio = (audioData: ArrayBuffer, isFinal: boolean = false) => {
     if (!avatarController.value) {
-      throw new Error('角色未加载或未连接')
+      throw new Error('Character not loaded or not connected')
     }
     avatarController.value.send(audioData, isFinal)
   }
 
-  // 打断对话
+  // Interrupt conversation
   const interrupt = () => {
     if (!avatarController.value) {
-      throw new Error('角色未加载或未连接')
+      throw new Error('Character not loaded or not connected')
     }
     avatarController.value.interrupt()
   }
 
-  // 断开连接
+  // Disconnect
   const disconnect = async () => {
     if (avatarViewRef.value?.avatarController) {
       avatarViewRef.value.avatarController.close()
-      // 断开连接时不清空 avatarView 和 avatarController，允许重新连接
+      // Don't clear avatarView and avatarController when disconnecting, allow reconnection
     }
   }
 
-  // 卸载角色
-  // ⚠️ 重要：SDK 目前只支持同时存在一个角色，如果要加载新角色，必须先卸载当前角色
+  // Unload character
+  // ⚠️ Important: SDK currently only supports one character at a time. If you want to load a new character, you must unload the current one first
   const unloadCharacter = () => {
     if (avatarViewRef.value) {
-      avatarViewRef.value.dispose() // 清理所有资源，包括关闭连接、释放 WASM 资源、移除 Canvas 等
+      avatarViewRef.value.dispose() // Clean up all resources, including closing connection, releasing WASM resources, removing Canvas, etc.
       avatarViewRef.value = null
       avatarController.value = null
     }
   }
 
-  // 清理资源
+  // Cleanup resources
   onUnmounted(() => {
     if (avatarViewRef.value) {
       avatarViewRef.value.dispose()

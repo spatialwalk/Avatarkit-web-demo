@@ -1,6 +1,6 @@
 /**
  * Avatar SDK Hook
- * 封装 SDK 的初始化和使用逻辑
+ * Encapsulates SDK initialization and usage logic
  */
 
 import { useState, useRef, useEffect } from 'react'
@@ -13,7 +13,7 @@ export function useAvatarSDK() {
   const avatarManagerRef = useRef<AvatarManager | null>(null)
   const avatarViewRef = useRef<AvatarView | null>(null)
 
-  // 初始化 SDK
+  // Initialize SDK
   const initialize = async (environment: Environment, sessionToken?: string) => {
     try {
       await AvatarKit.initialize('demo', { environment })
@@ -26,11 +26,11 @@ export function useAvatarSDK() {
       avatarManagerRef.current = avatarManager
       setIsInitialized(true)
     } catch (error) {
-      throw new Error(`SDK 初始化失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`SDK initialization failed: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
-  // 加载角色
+  // Load character
   const loadCharacter = async (
     characterId: string,
     container: HTMLElement,
@@ -41,17 +41,17 @@ export function useAvatarSDK() {
     },
   ) => {
     if (!avatarManagerRef.current) {
-      throw new Error('SDK 未初始化')
+      throw new Error('SDK not initialized')
     }
 
     try {
-      // 1. 加载 Avatar
+      // 1. Load Avatar
       const avatar = await avatarManagerRef.current.load(characterId)
       
-      // 2. 创建 AvatarView
+      // 2. Create AvatarView
       const avatarView = new AvatarView(avatar, container)
       
-      // 3. 设置回调
+      // 3. Set callbacks
       if (callbacks?.onConnectionState) {
         avatarView.avatarController.onConnectionState = callbacks.onConnectionState
       }
@@ -66,68 +66,68 @@ export function useAvatarSDK() {
       avatarViewRef.current = avatarView
       setAvatarController(avatarView.avatarController)
     } catch (error) {
-      throw new Error(`角色加载失败: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Failed to load character: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
-  // 连接服务
+  // Connect service
   const connect = async () => {
     if (!avatarView?.avatarController) {
-      throw new Error('角色未加载')
+      throw new Error('Character not loaded')
     }
 
     await avatarView.avatarController.start()
   }
 
-  // 发送音频数据
+  // Send audio data
   const sendAudio = (audioData: ArrayBuffer, isFinal: boolean = false) => {
     if (!avatarController) {
-      throw new Error('角色未加载或未连接')
+      throw new Error('Character not loaded or not connected')
     }
     avatarController.send(audioData, isFinal)
   }
 
-  // 打断对话
+  // Interrupt conversation
   const interrupt = () => {
     if (!avatarController) {
-      throw new Error('角色未加载或未连接')
+      throw new Error('Character not loaded or not connected')
     }
     avatarController.interrupt()
   }
 
-  // 断开连接
+  // Disconnect
   const disconnect = async () => {
     if (avatarView?.avatarController) {
       avatarView.avatarController.close()
-      // 断开连接时不清空 avatarView 和 avatarController，允许重新连接
+      // Don't clear avatarView and avatarController when disconnecting, allow reconnection
     }
   }
 
-  // 卸载角色
-  // ⚠️ 重要：SDK 目前只支持同时存在一个角色，如果要加载新角色，必须先卸载当前角色
+  // Unload character
+  // ⚠️ Important: SDK currently only supports one character at a time. If you want to load a new character, you must unload the current one first
   const unloadCharacter = () => {
     if (avatarView) {
-      avatarView.dispose() // 清理所有资源，包括关闭连接、释放 WASM 资源、移除 Canvas 等
+      avatarView.dispose() // Clean up all resources, including closing connection, releasing WASM resources, removing Canvas, etc.
       setAvatarView(null)
       avatarViewRef.current = null
       setAvatarController(null)
     }
   }
 
-  // 清理资源（只在组件卸载时执行）
+  // Cleanup resources (only executed on component unmount)
   useEffect(() => {
     return () => {
-      // 组件卸载时清理所有资源
+      // Clean up all resources when component unmounts
       if (avatarViewRef.current) {
         avatarViewRef.current.dispose()
       }
-      // avatarManagerRef 在组件卸载时清空
+      // Clear avatarManagerRef when component unmounts
       if (avatarManagerRef.current) {
         avatarManagerRef.current = null
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // 空依赖数组，只在组件卸载时执行
+  }, []) // Empty dependency array, only executed on component unmount
 
   return {
     isInitialized,

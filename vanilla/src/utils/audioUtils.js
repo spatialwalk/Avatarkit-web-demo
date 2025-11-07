@@ -1,13 +1,13 @@
 /**
- * 音频处理工具函数
+ * Audio processing utility functions
  */
 
 /**
- * 重采样音频数据
- * @param {Float32Array} inputData - 输入音频数据
- * @param {number} fromSampleRate - 源采样率
- * @param {number} toSampleRate - 目标采样率
- * @returns {Float32Array} 重采样后的音频数据
+ * Resample audio data
+ * @param {Float32Array} inputData - Input audio data
+ * @param {number} fromSampleRate - Source sample rate
+ * @param {number} toSampleRate - Target sample rate
+ * @returns {Float32Array} Resampled audio data
  */
 export function resampleAudio(inputData, fromSampleRate, toSampleRate) {
   if (fromSampleRate === toSampleRate) {
@@ -24,7 +24,7 @@ export function resampleAudio(inputData, fromSampleRate, toSampleRate) {
     const indexCeil = Math.min(indexFloor + 1, inputData.length - 1)
     const fraction = index - indexFloor
 
-    // 线性插值
+    // Linear interpolation
     outputData[i] = inputData[indexFloor] * (1 - fraction) + inputData[indexCeil] * fraction
   }
 
@@ -32,39 +32,39 @@ export function resampleAudio(inputData, fromSampleRate, toSampleRate) {
 }
 
 /**
- * 将 Float32Array 音频数据转换为 Int16 PCM
- * @param {Float32Array} float32Data - Float32 格式的音频数据
- * @returns {Int16Array} Int16 PCM 格式的音频数据
+ * Convert Float32Array audio data to Int16 PCM
+ * @param {Float32Array} float32Data - Float32 format audio data
+ * @returns {Int16Array} Int16 PCM format audio data
  */
 export function convertToInt16PCM(float32Data) {
   const pcm16 = new Int16Array(float32Data.length)
   for (let i = 0; i < float32Data.length; i++) {
-    // 限制在 [-1, 1] 范围
+    // Limit to [-1, 1] range
     const s = Math.max(-1, Math.min(1, float32Data[i]))
-    // 转换为 Int16 范围 [-32768, 32767]
+    // Convert to Int16 range [-32768, 32767]
     pcm16[i] = Math.round(s * 32768)
   }
   return pcm16
 }
 
 /**
- * 将 Int16Array 转换为 Uint8Array（小端序）
- * @param {Int16Array} int16Data - Int16 格式的音频数据
- * @returns {Uint8Array} Uint8 格式的音频数据
+ * Convert Int16Array to Uint8Array (little-endian)
+ * @param {Int16Array} int16Data - Int16 format audio data
+ * @returns {Uint8Array} Uint8 format audio data
  */
 export function convertToUint8Array(int16Data) {
   const uint8Array = new Uint8Array(int16Data.length * 2)
   const view = new DataView(uint8Array.buffer)
   for (let i = 0; i < int16Data.length; i++) {
-    view.setInt16(i * 2, int16Data[i], true) // true 表示小端序
+    view.setInt16(i * 2, int16Data[i], true) // true means little-endian
   }
   return uint8Array
 }
 
 /**
- * 合并多个 Float32Array 音频块
- * @param {Array<{data: Float32Array}>} chunks - 音频块数组
- * @returns {Float32Array} 合并后的音频数据
+ * Merge multiple Float32Array audio chunks
+ * @param {Array<{data: Float32Array}>} chunks - Audio chunk array
+ * @returns {Float32Array} Merged audio data
  */
 export function mergeAudioChunks(chunks) {
   const totalSamples = chunks.reduce((sum, chunk) => sum + chunk.data.length, 0)

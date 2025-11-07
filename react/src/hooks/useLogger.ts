@@ -1,5 +1,5 @@
 /**
- * 日志 Hook
+ * Logger Hook
  */
 
 import { useState, useCallback } from 'react'
@@ -7,7 +7,7 @@ import type { LogEntry, StatusType } from '../types'
 
 export function useLogger() {
   const [logs, setLogs] = useState<LogEntry[]>([])
-  const [statusMessage, setStatusMessage] = useState('等待初始化...')
+  const [statusMessage, setStatusMessage] = useState('Waiting for initialization...')
   const [statusClass, setStatusClass] = useState<StatusType>('info')
 
   const log = useCallback((level: LogEntry['level'], message: string, data?: any) => {

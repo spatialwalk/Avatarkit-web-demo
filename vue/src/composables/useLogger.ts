@@ -1,5 +1,5 @@
 /**
- * 日志 Composable
+ * Logger Composable
  */
 
 import { ref } from 'vue'
@@ -7,7 +7,7 @@ import type { LogEntry, StatusType } from '../types'
 
 export function useLogger() {
   const logs = ref<LogEntry[]>([])
-  const statusMessage = ref('等待初始化...')
+  const statusMessage = ref('Waiting for initialization...')
   const statusClass = ref<StatusType>('info')
 
   function log(level: LogEntry['level'], message: string) {

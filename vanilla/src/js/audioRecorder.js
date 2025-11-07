@@ -1,12 +1,12 @@
 /**
- * 音频录制功能
- * 处理麦克风录音和音频数据处理
+ * Audio recording functionality
+ * Handles microphone recording and audio data processing
  */
 
 import { resampleAudio, convertToInt16PCM, convertToUint8Array, mergeAudioChunks } from '../utils/audioUtils.js'
 
 /**
- * 音频录制器类
+ * Audio recorder class
  */
 export class AudioRecorder {
   constructor() {
@@ -19,22 +19,22 @@ export class AudioRecorder {
   }
 
   /**
-   * 开始录音
+   * Start recording
    * @returns {Promise<void>}
    */
   async start() {
     try {
-      // 如果已经在录音，先停止之前的录音
+      // If already recording, stop previous recording first
       if (this.isRecording) {
         await this.stop()
       }
 
-      // 清理之前的资源（防止残留）
+      // Clean up previous resources (prevent residue)
       if (this.scriptProcessor) {
         try {
           this.scriptProcessor.disconnect()
         } catch (e) {
-          // 忽略错误
+          // Ignore errors
         }
         this.scriptProcessor = null
       }
@@ -50,12 +50,12 @@ export class AudioRecorder {
             await this.audioContext.close()
           }
         } catch (e) {
-          // 忽略错误
+          // Ignore errors
         }
         this.audioContext = null
       }
 
-      // 清空之前的录音数据
+      // Clear previous recording data
       this.recordedAudioChunks = []
 
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
@@ -70,7 +70,7 @@ export class AudioRecorder {
           sampleRate: 16000,
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: false, // 禁用自动增益控制
+          autoGainControl: false, // Disable automatic gain control
         },
       })
 
@@ -78,9 +78,9 @@ export class AudioRecorder {
       const bufferSize = 4096
       this.scriptProcessor = this.audioContext.createScriptProcessor(bufferSize, 1, 1)
 
-      // 使用 GainNode 将音量设为 0，避免产生音频反馈
+      // Use GainNode to set volume to 0, avoid audio feedback
       const gainNode = this.audioContext.createGain()
-      gainNode.gain.value = 0 // 静音，避免反馈
+      gainNode.gain.value = 0 // Mute, avoid feedback
 
       const source = this.audioContext.createMediaStreamSource(stream)
       source.connect(this.scriptProcessor)
@@ -92,7 +92,7 @@ export class AudioRecorder {
         const inputData = event.inputBuffer.getChannelData(0)
         const float32Data = new Float32Array(inputData)
         
-        // 保存音频数据
+        // Save audio data
         this.recordedAudioChunks.push({
           data: float32Data,
         })
@@ -102,25 +102,25 @@ export class AudioRecorder {
 
       return Promise.resolve()
     } catch (error) {
-      throw new Error(`录音启动失败: ${error.message}`)
+      throw new Error(`Failed to start recording: ${error.message}`)
     }
   }
 
   /**
-   * 停止录音并处理音频数据
-   * @returns {Promise<ArrayBuffer>} 处理后的音频数据
+   * Stop recording and process audio data
+   * @returns {Promise<ArrayBuffer>} Processed audio data
    */
   async stop() {
     try {
-      // 先停止录音标志，防止 onaudioprocess 继续添加数据
+      // Stop recording flag first to prevent onaudioprocess from continuing to add data
       this.isRecording = false
 
-      // 清理录音资源
+      // Clean up recording resources
       if (this.scriptProcessor) {
         try {
           this.scriptProcessor.disconnect()
         } catch (e) {
-          // 忽略错误
+          // Ignore errors
         }
         this.scriptProcessor = null
       }
@@ -136,47 +136,47 @@ export class AudioRecorder {
             await this.audioContext.close()
           }
         } catch (err) {
-          console.warn('关闭 AudioContext 时出错:', err)
+          console.warn('Error closing AudioContext:', err)
         } finally {
           this.audioContext = null
         }
       }
 
-      // 处理音频数据
+      // Process audio data
       if (this.recordedAudioChunks.length === 0) {
         return null
       }
 
       const currentSampleRate = this.actualSampleRate
 
-      // 1. 合并所有 Float32Array 数据
+      // 1. Merge all Float32Array data
       const mergedFloat32 = mergeAudioChunks(this.recordedAudioChunks)
 
-      // 2. 重采样到 16kHz（如果需要）
+      // 2. Resample to 16kHz (if needed)
       let finalAudio = mergedFloat32
       if (currentSampleRate !== 16000) {
         finalAudio = resampleAudio(mergedFloat32, currentSampleRate, 16000)
       }
 
-      // 3. 转换为 Int16 PCM
+      // 3. Convert to Int16 PCM
       const pcm16 = convertToInt16PCM(finalAudio)
 
-      // 4. 转换为 Uint8Array（确保正确的字节序）
+      // 4. Convert to Uint8Array (ensure correct byte order)
       const mergedAudio = convertToUint8Array(pcm16)
 
-      // 清空缓存
+      // Clear cache
       this.recordedAudioChunks = []
 
       return mergedAudio.buffer
     } catch (error) {
-      console.error(`[AudioRecorder] stop() 出错:`, error)
-      throw new Error(`停止录音失败: ${error.message}`)
+      console.error(`[AudioRecorder] stop() error:`, error)
+      throw new Error(`Failed to stop recording: ${error.message}`)
     }
   }
 
   /**
-   * 获取录音时长（秒）
-   * @returns {number} 录音时长
+   * Get recording duration (seconds)
+   * @returns {number} Recording duration
    */
   getDuration() {
     const totalSamples = this.recordedAudioChunks.reduce((sum, chunk) => sum + chunk.data.length, 0)

@@ -1,268 +1,268 @@
-# SPAvatarKit SDK 示例
+# SPAvatarKit SDK Examples
 
 SPAvatarKit practice demos in vanilla, Vue, and React
 
-这是一个完整的 SDK 使用示例集合，展示如何在不同框架中集成和使用 SPAvatarKit SDK。
+This is a complete SDK usage example collection demonstrating how to integrate and use the SPAvatarKit SDK in different frameworks.
 
-## 📋 目录
+## 📋 Table of Contents
 
-- [快速开始](#快速开始)
-- [示例列表](#示例列表)
-- [前置要求](#前置要求)
-- [使用步骤](#使用步骤)
-- [配置说明](#配置说明)
-- [常见问题](#常见问题)
+- [Quick Start](#quick-start)
+- [Example List](#example-list)
+- [Prerequisites](#prerequisites)
+- [Usage Steps](#usage-steps)
+- [Configuration](#configuration)
+- [FAQ](#faq)
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 克隆或下载仓库
+### 1. Clone or Download the Repository
 
 ```bash
-# 克隆仓库
+# Clone the repository
 git clone https://github.com/spatialwalk/Avatarkit-web-demo.git
 cd Avatarkit-web-demo
 
-# 或者直接下载 ZIP 文件并解压
+# Or download the ZIP file and extract it
 ```
 
-### 2. 选择一个示例并安装依赖
+### 2. Choose an Example and Install Dependencies
 
 ```bash
-cd vanilla  # 或 react, vue
+cd vanilla  # or react, vue
 npm install
 ```
 
-### 3. 确保 SDK 已安装
+### 3. Ensure SDK is Installed
 
-示例需要安装 `@spatialwalk/avatarkit` SDK：
+Examples require the `@spatialwalk/avatarkit` SDK to be installed:
 
 ```bash
 npm install @spatialwalk/avatarkit
 ```
 
-### 4. 启动开发服务器
+### 4. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-### 5. 访问示例页面
+### 5. Access the Example Pages
 
 - **Vanilla JS**: http://localhost:5174/demo.html
 - **Vue 3**: http://localhost:5175
 - **React**: http://localhost:5176
 
-### 6. 开始使用
+### 6. Start Using
 
-1. 在界面中输入角色 ID
-2. （可选）输入 Session Token（如果服务器需要认证）
-3. 点击"初始化 SDK"
-4. 点击"加载角色"
-5. 点击"连接服务"
-6. 点击"开始录音"并开始说话
-7. 观察角色的实时动画效果
+1. Enter the character ID in the interface
+2. (Optional) Enter Session Token (if server requires authentication)
+3. Click "Initialize SDK"
+4. Click "Load Character"
+5. Click "Connect Service"
+6. Click "Start Recording" and start speaking
+7. Observe the character's real-time animation effects
 
-## 📦 示例列表
+## 📦 Example List
 
-### 1. Vanilla JS 示例 (`vanilla/`)
+### 1. Vanilla JS Example (`vanilla/`)
 
-原生 JavaScript 示例，不依赖任何框架。
+Native JavaScript example with no framework dependencies.
 
-**适用场景：**
-- 快速原型开发
-- 不依赖框架的项目
-- 学习 SDK 基础用法
+**Use Cases:**
+- Rapid prototyping
+- Framework-independent projects
+- Learning basic SDK usage
 
-**运行方式：**
+**Run:**
 ```bash
 cd vanilla
 npm install
 npm run dev
 ```
 
-**访问地址：** `http://localhost:5174/demo.html`
+**Access:** `http://localhost:5174/demo.html`
 
-**特点：**
-- 纯 JavaScript，无框架依赖
-- 代码结构简单直观
-- 适合快速学习和测试
+**Features:**
+- Pure JavaScript, no framework dependencies
+- Simple and intuitive code structure
+- Suitable for quick learning and testing
 
-### 2. Vue 3 示例 (`vue/`)
+### 2. Vue 3 Example (`vue/`)
 
-使用 Vue 3 Composition API 的完整示例。
+Complete example using Vue 3 Composition API.
 
-**适用场景：**
-- Vue 3 项目集成
-- 需要响应式状态管理
-- 组件化开发
+**Use Cases:**
+- Vue 3 project integration
+- Reactive state management needed
+- Component-based development
 
-**运行方式：**
+**Run:**
 ```bash
 cd vue
 npm install
 npm run dev
 ```
 
-**访问地址：** `http://localhost:5175`
+**Access:** `http://localhost:5175`
 
-**特点：**
+**Features:**
 - Vue 3 Composition API
-- TypeScript 支持
-- 响应式数据绑定
+- TypeScript support
+- Reactive data binding
 
-### 3. React 示例 (`react/`)
+### 3. React Example (`react/`)
 
-使用 React Hooks 的完整示例。
+Complete example using React Hooks.
 
-**适用场景：**
-- React 项目集成
-- 需要函数式编程风格
-- 现代 React 开发
+**Use Cases:**
+- React project integration
+- Functional programming style needed
+- Modern React development
 
-**运行方式：**
+**Run:**
 ```bash
 cd react
 npm install
 npm run dev
 ```
 
-**访问地址：** `http://localhost:5176`
+**Access:** `http://localhost:5176`
 
-**特点：**
+**Features:**
 - React Hooks
-- TypeScript 支持
-- 函数式组件
+- TypeScript support
+- Functional components
 
-## ⚙️ 前置要求
+## ⚙️ Prerequisites
 
-在运行示例之前，请确保满足以下要求：
+Before running the examples, ensure the following requirements are met:
 
 - **Node.js** >= 16.0.0
-- **npm/yarn/pnpm** 包管理器
-- **现代浏览器**（支持 Web Audio API、WebSocket、WASM）
+- **npm/yarn/pnpm** package manager
+- **Modern browser** (supports Web Audio API, WebSocket, WASM)
   - Chrome >= 90
   - Firefox >= 88
   - Safari >= 14.1
   - Edge >= 90
-- **麦克风权限**（用于录音功能）
-- **SDK 包**已安装（在示例目录中运行 `npm install @spatialwalk/avatarkit`）
+- **Microphone permission** (for recording functionality)
+- **SDK package** installed (run `npm install @spatialwalk/avatarkit` in the example directory)
 
-## 📝 使用步骤
+## 📝 Usage Steps
 
-所有示例都遵循相同的基本流程：
+All examples follow the same basic flow:
 
-1. **初始化 SDK** - 配置环境和认证信息
-   - 选择环境（US/CN/Test）
-   - （可选）输入 Session Token
+1. **Initialize SDK** - Configure environment and authentication
+   - Select environment (US/CN/Test)
+   - (Optional) Enter Session Token
 
-2. **输入角色 ID** - 指定要加载的角色
-   - 从 SDK 管理平台获取角色 ID
+2. **Enter Character ID** - Specify the character to load
+   - Get character ID from SDK management platform
 
-3. **加载角色** - 下载并初始化角色资源
-   - SDK 会自动下载角色模型和纹理
-   - 显示加载进度
+3. **Load Character** - Download and initialize character resources
+   - SDK will automatically download character models and textures
+   - Display loading progress
 
-4. **连接服务** - 建立 WebSocket 连接
-   - 连接到实时动画服务
-   - 等待连接成功
+4. **Connect Service** - Establish WebSocket connection
+   - Connect to real-time animation service
+   - Wait for successful connection
 
-5. **开始录音** - 捕获音频并发送到服务器
-   - 浏览器会请求麦克风权限
-   - 开始说话，音频数据会被收集
-   - 停止录音时，所有音频数据会被处理并发送到服务器
-   - 服务端收到完整音频数据后会开始播放动画和音频
-   - **注意**：录音只是一种演示手段，实际应用中您可以从任何来源获取音频数据（如音频文件、流媒体等）
+5. **Start Recording** - Capture audio and send to server
+   - Browser will request microphone permission
+   - Start speaking, audio data will be collected
+   - When stopping recording, all audio data will be processed and sent to server
+   - Server will start playing animation and audio after receiving complete audio data
+   - **Note**: Recording is just a demonstration method. In actual applications, you can obtain audio data from any source (such as audio files, streaming media, etc.)
 
-6. **实时渲染** - 接收动画数据并渲染到 Canvas
-   - 角色会根据音频实时生成动画
-   - 可以看到角色的嘴部、表情等动画
+6. **Real-time Rendering** - Receive animation data and render to Canvas
+   - Character will generate animations based on audio in real-time
+   - You can see character's mouth, expressions, and other animations
 
-## 🔧 配置说明
+## 🔧 Configuration
 
-### 环境配置
+### Environment Configuration
 
-示例支持三种环境：
+Examples support three environments:
 
-- **`test`** - 测试环境（默认）
-- **`us`** - 美国生产环境
-- **`cn`** - 中国生产环境
+- **`test`** - Test environment (default)
+- **`us`** - US production environment
+- **`cn`** - China production environment
 
-### Session Token（可选）
+### Session Token (Optional)
 
-如果服务器需要认证，需要提供有效的 Session Token：
+If the server requires authentication, provide a valid Session Token:
 
-- 在界面中输入 Session Token
-- 或通过代码配置（查看各示例的源代码）
+- Enter Session Token in the interface
+- Or configure via code (check source code of each example)
 
-### 角色 ID
+### Character ID
 
-角色 ID 可以从 SDK 管理平台获取，用于标识要加载的虚拟角色。
+Character ID can be obtained from the SDK management platform and is used to identify the virtual character to load.
 
-## 🔧 技术细节
+## 🔧 Technical Details
 
-- **SDK 导入**：所有示例都使用标准的 npm 包导入方式 `import('@spatialwalk/avatarkit')`
-- **动画数据**：FLAME 参数关键帧序列
-- **音频数据源**：示例中使用麦克风录音仅作为演示，实际应用中可以使用任何音频来源（文件、流媒体、合成音频等）
-- **WASM 支持**：所有示例都配置了正确的 WASM MIME 类型
-- **渲染后端**：自动选择 WebGPU 或 WebGL
+- **SDK Import**: All examples use standard npm package import `import('@spatialwalk/avatarkit')`
+- **Animation Data**: FLAME parameter keyframe sequences
+- **Audio Data Source**: Microphone recording in examples is for demonstration only. In actual applications, any audio source can be used (files, streaming media, synthesized audio, etc.)
+- **WASM Support**: All examples are configured with correct WASM MIME types
+- **Rendering Backend**: Automatically selects WebGPU or WebGL
 
-## ❓ 常见问题
+## ❓ FAQ
 
-### Q: 如何获取 Session Token？
+### Q: How to get Session Token?
 
-A: Session Token 需要从 SDK 提供商获取。请联系 SDK 提供商或查看 SDK 主文档获取更多信息。
+A: Session Token needs to be obtained from the SDK provider. Please contact the SDK provider or check the main SDK documentation for more information.
 
-### Q: 示例运行后看不到角色？
+### Q: Can't see the character after running the example?
 
-A: 请检查以下几点：
-- 角色 ID 是否正确
-- 网络连接是否正常
-- 浏览器控制台是否有错误信息
-- 是否已经成功加载角色（查看日志面板）
+A: Please check the following:
+- Is the character ID correct?
+- Is the network connection normal?
+- Are there any error messages in the browser console?
+- Has the character been successfully loaded? (Check the log panel)
 
-### Q: 录音功能不工作？
+### Q: Recording function not working?
 
-A: 确保：
-- 浏览器已授权麦克风权限
-- 使用 HTTPS 或 localhost（某些浏览器要求）
-- 检查浏览器控制台的错误信息
+A: Ensure:
+- Browser has granted microphone permission
+- Using HTTPS or localhost (required by some browsers)
+- Check browser console for error messages
 
-### Q: WebSocket 连接失败？
+### Q: WebSocket connection failed?
 
-A: 可能的原因：
-- 网络连接问题
-- Session Token 无效或过期
-- 服务器地址配置错误
-- 检查浏览器控制台的错误信息
+A: Possible reasons:
+- Network connection issues
+- Session Token invalid or expired
+- Server address configuration error
+- Check browser console for error messages
 
-### Q: SDK 如何安装？
+### Q: How to install SDK?
 
-A: 通过 npm 安装：
+A: Install via npm:
 ```bash
 npm install @spatialwalk/avatarkit
 ```
 
-### Q: 支持哪些浏览器？
+### Q: Which browsers are supported?
 
-A: 支持所有现代浏览器：
+A: All modern browsers are supported:
 - Chrome >= 90
 - Firefox >= 88
 - Safari >= 14.1
 - Edge >= 90
 
-### Q: 可以在移动设备上运行吗？
+### Q: Can it run on mobile devices?
 
-A: 可以，但需要：
-- 支持 Web Audio API 的移动浏览器
-- HTTPS 连接（用于麦克风权限）
-- 足够的性能来运行 3D 渲染
+A: Yes, but requires:
+- Mobile browser supporting Web Audio API
+- HTTPS connection (for microphone permission)
+- Sufficient performance to run 3D rendering
 
-### Q: 如何修改端口号？
+### Q: How to modify the port number?
 
-A: 在每个示例的 `vite.config.ts` 中修改 `server.port` 配置。
+A: Modify the `server.port` configuration in each example's `vite.config.ts`.
 
-## 📚 更多信息
+## 📚 More Information
 
-- 查看每个示例目录下的 `README.md` 了解详细说明
-- 查看示例源代码了解具体实现细节
-- 如有问题，请提交 [GitHub Issue](https://github.com/spatialwalk/Avatarkit-web-demo/issues)
+- Check the `README.md` in each example directory for detailed instructions
+- Check the example source code for specific implementation details
+- If you have questions, please submit a [GitHub Issue](https://github.com/spatialwalk/Avatarkit-web-demo/issues)

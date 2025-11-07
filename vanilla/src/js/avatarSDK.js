@@ -1,10 +1,10 @@
 /**
- * SDK 封装
- * 管理 SDK 的初始化、角色加载和连接状态
+ * SDK wrapper
+ * Manages SDK initialization, character loading, and connection state
  */
 
 /**
- * SDK 管理器类
+ * SDK manager class
  */
 export class AvatarSDKManager {
   constructor(logger) {
@@ -20,42 +20,42 @@ export class AvatarSDKManager {
   }
 
   /**
-   * 加载 SDK
-   * @returns {Promise<boolean>} 是否加载成功
+   * Load SDK
+   * @returns {Promise<boolean>} Whether loading succeeded
    */
   async loadSDK() {
     try {
-      this.logger.info('正在加载 SDK...')
-      // 使用 npm 安装的 SDK
+      this.logger.info('Loading SDK...')
+      // Use npm-installed SDK
       const sdk = await import('@spatialwalk/avatarkit')
       this.AvatarKit = sdk.AvatarKit
       this.AvatarManager = sdk.AvatarManager
       this.AvatarView = sdk.AvatarView
-      this.logger.success('SDK 加载成功')
+      this.logger.success('SDK loaded successfully')
       return true
     } catch (error) {
-      this.logger.error('SDK 加载失败，请确保已构建 SDK', error)
-      this.logger.info('提示：运行 npm run build 构建 SDK')
+      this.logger.error('SDK loading failed, please ensure SDK is built', error)
+      this.logger.info('Tip: Run npm run build to build SDK')
       return false
     }
   }
 
   /**
-   * 初始化 SDK
-   * @param {string} environment - 环境 (us, cn, test)
-   * @param {string} sessionToken - Session Token（可选）
+   * Initialize SDK
+   * @param {string} environment - Environment (us, cn, test)
+   * @param {string} sessionToken - Session Token (optional)
    * @returns {Promise<void>}
    */
   async initialize(environment, sessionToken = null) {
     if (!this.AvatarKit || !this.AvatarManager) {
       const loaded = await this.loadSDK()
       if (!loaded) {
-        throw new Error('SDK 未加载')
+        throw new Error('SDK not loaded')
       }
     }
 
-    this.logger.info('开始初始化 SDK')
-    this.logger.info(`使用环境: ${environment}`)
+    this.logger.info('Starting SDK initialization')
+    this.logger.info(`Using environment: ${environment}`)
 
     await this.AvatarKit.initialize('demo', {
       environment,
@@ -64,42 +64,42 @@ export class AvatarSDKManager {
 
     if (sessionToken) {
       this.AvatarKit.setSessionToken(sessionToken)
-      this.logger.info('Session Token 已设置')
+      this.logger.info('Session Token set')
     }
 
     this.avatarManager = this.AvatarManager.shared
     this.isInitialized = true
-    this.logger.success('SDK 初始化成功')
+    this.logger.success('SDK initialized successfully')
   }
 
   /**
-   * 加载角色
-   * @param {string} characterId - 角色 ID
-   * @param {HTMLElement} canvasContainer - Canvas 容器
-   * @param {Function} onConnectionState - 连接状态回调
-   * @param {Function} onAvatarState - 角色状态回调
-   * @param {Function} onError - 错误回调
+   * Load character
+   * @param {string} characterId - Character ID
+   * @param {HTMLElement} canvasContainer - Canvas container
+   * @param {Function} onConnectionState - Connection state callback
+   * @param {Function} onAvatarState - Avatar state callback
+   * @param {Function} onError - Error callback
    * @returns {Promise<void>}
    */
   async loadCharacter(characterId, canvasContainer, onConnectionState, onAvatarState, onError) {
     if (!characterId.trim()) {
-      throw new Error('请输入角色 ID')
+      throw new Error('Please enter character ID')
     }
 
-    this.logger.info(`开始加载角色: ${characterId}`)
+    this.logger.info(`Starting to load character: ${characterId}`)
 
     const avatar = await this.avatarManager.load(characterId, (progress) => {
-      this.logger.info(`加载进度: ${progress.type} ${progress.progress ? `(${progress.progress}%)` : ''}`)
+      this.logger.info(`Loading progress: ${progress.type} ${progress.progress ? `(${progress.progress}%)` : ''}`)
     })
 
-    this.logger.success('角色加载成功', { id: avatar.id, name: avatar.name })
+    this.logger.success('Character loaded successfully', { id: avatar.id, name: avatar.name })
 
-    // 创建视图
+    // Create view
     this.avatarView = new this.AvatarView(avatar, canvasContainer)
 
     if (this.avatarView.avatarController) {
       this.avatarView.avatarController.onConnectionState = (state) => {
-        this.logger.info(`连接状态: ${state}`)
+        this.logger.info(`Connection state: ${state}`)
         this.isConnected = state === 'connected'
         if (onConnectionState) {
           onConnectionState(state)
@@ -108,84 +108,84 @@ export class AvatarSDKManager {
 
       this.avatarView.avatarController.onAvatarState = (state) => {
         this.avatarState = state
-        this.logger.info(`角色状态: ${state}`)
+        this.logger.info(`Avatar state: ${state}`)
         if (onAvatarState) {
           onAvatarState(state)
         }
       }
 
       this.avatarView.avatarController.onError = (error) => {
-        this.logger.error(`错误: ${error.message}`, error)
+        this.logger.error(`Error: ${error.message}`, error)
         if (onError) {
           onError(error)
         }
       }
     }
 
-    this.logger.success('角色视图已创建')
+    this.logger.success('Character view created')
   }
 
   /**
-   * 连接服务
+   * Connect service
    * @returns {Promise<void>}
    */
   async connect() {
     if (!this.avatarView?.avatarController) {
-      throw new Error('角色未加载')
+      throw new Error('Character not loaded')
     }
 
-    this.logger.info('开始连接 WebSocket 服务')
+    this.logger.info('Starting to connect WebSocket service')
     await this.avatarView.avatarController.start()
-    this.logger.success('连接请求已发送')
+    this.logger.success('Connection request sent')
   }
 
   /**
-   * 打断对话
+   * Interrupt conversation
    */
   interrupt() {
     if (!this.avatarView?.avatarController) {
-      throw new Error('角色未加载')
+      throw new Error('Character not loaded')
     }
     if (!this.isConnected) {
-      throw new Error('尚未连接服务')
+      throw new Error('Not connected to service')
     }
     this.avatarView.avatarController.interrupt()
-    this.logger.info('已打断当前对话')
+    this.logger.info('Current conversation interrupted')
   }
 
   /**
-   * 断开连接
+   * Disconnect
    */
   async disconnect() {
     if (this.avatarView?.avatarController) {
       this.avatarView.avatarController.close()
-      this.logger.info('连接已关闭')
+      this.logger.info('Connection closed')
     }
     this.isConnected = false
   }
 
   /**
-   * 卸载角色
-   * ⚠️ 重要：SDK 目前只支持同时存在一个角色，如果要加载新角色，必须先卸载当前角色
+   * Unload character
+   * ⚠️ Important: SDK currently only supports one character at a time. If you want to load a new character, you must unload the current one first
    */
   unloadCharacter() {
     if (this.avatarView) {
-      this.avatarView.dispose() // 清理所有资源，包括关闭连接、释放 WASM 资源、移除 Canvas 等
+      this.avatarView.dispose() // Clean up all resources, including closing connection, releasing WASM resources, removing Canvas, etc.
       this.avatarView = null
       this.isConnected = false
       this.avatarState = null
-      this.logger.info('角色已卸载，可以重新加载新角色')
+      this.logger.info('Character unloaded, can reload new character')
     }
   }
 
   /**
-   * 发送音频数据
-   * @param {ArrayBuffer} audioData - 音频数据
-   * @param {boolean} isFinal - 是否是最后一段数据
+   * Send audio data
+   * @param {ArrayBuffer} audioData - Audio data
+   * @param {boolean} isFinal - Whether this is the final data chunk
    */
   sendAudio(audioData, isFinal = false) {
     if (!this.avatarView?.avatarController) {
-      throw new Error('角色未加载或未连接')
+      throw new Error('Character not loaded or not connected')
     }
     this.avatarView.avatarController.send(audioData, isFinal)
   }
